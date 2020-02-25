@@ -75,6 +75,7 @@ def minim(n, d, dnf):
     printf(dnf, s)
 
 
+
 d = dict()
 dnf = list()
 n = 3
