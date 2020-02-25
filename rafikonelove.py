@@ -9,18 +9,16 @@ def weight(str):
     return weight
 
 
-def equal(miniterm, dnf):
-    symb = '*'
-    for i in range(len(miniterm)):
-        if miniterm[i] != '~' and miniterm[i] != dnf[i]:
-            symb = ' '
-            break
-    return symb
+# def equal(miniterm, dnf):
+#     symb = '*'
+#     for i in range(len(miniterm)):
+#         if miniterm[i] != '~' and miniterm[i] != dnf[i]:
+#             symb = ' '
+#             break
+#     return symb
 
 
 def printf(dnf, s):
-    # std::cout << std::endl << std::setw((n + 1) * (dnf.size() + 1)) << std::setfill('-') << ' ' << std::endl << std::setfill(' ');
-
     for i in range(len(dnf) + 1):
         if i == 0:
             print('  |', end='')
@@ -31,8 +29,14 @@ def printf(dnf, s):
     for el in s:
         print(el + '|', end='')
         for j in range(len(dnf)):
-            print(equal(el, dnf[j]) + ' |', end='')
-        print('\n', end= '')
+            #print(equal(el, dnf[j]) + ' |', end='')
+            eq = True
+            for k in range(len(el)):
+                if el[k] != '~' and el[k] != dnf[j][k]:
+                    eq = False
+                    break
+            print('* |', end='') if eq is not False else print('  |', end='')
+        print('\n', end='')
 
 
 def minim(n, d, dnf):
@@ -77,7 +81,7 @@ def minim(n, d, dnf):
 
 d = dict()
 dnf = list()
-n = 3
+n = 6
 for str in sys.stdin:
     str = str.strip('\n')
     d.setdefault(weight(str), [])
