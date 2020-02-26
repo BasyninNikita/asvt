@@ -9,15 +9,6 @@ def weight(str):
     return weight
 
 
-# def equal(miniterm, dnf):
-#     symb = '*'
-#     for i in range(len(miniterm)):
-#         if miniterm[i] != '~' and miniterm[i] != dnf[i]:
-#             symb = ' '
-#             break
-#     return symb
-
-
 def printf(dnf, s):
     for i in range(len(dnf) + 1):
         if i == 0:
@@ -29,7 +20,6 @@ def printf(dnf, s):
     for el in s:
         print(el + '|', end='')
         for j in range(len(dnf)):
-            #print(equal(el, dnf[j]) + ' |', end='')
             eq = True
             for k in range(len(el)):
                 if el[k] != '~' and el[k] != dnf[j][k]:
