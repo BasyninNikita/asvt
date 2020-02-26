@@ -14,7 +14,7 @@ def printf(dnf, s):
         if i == 0:
             print('  |', end='')
         else:
-            print(dnf[i - 1], end= '')
+            print(dnf[i - 1], end='')
             print('|', end='')
     print('\n', end='')
     for el in s:
