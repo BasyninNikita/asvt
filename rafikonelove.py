@@ -12,7 +12,7 @@ def weight(str):
 def printf(dnf, s):
     for i in range(len(dnf) + 1):
         if i == 0:
-            print('  |', end='')
+            print('      |', end='')
         else:
             print(dnf[i - 1], end='')
             print('|', end='')
@@ -25,7 +25,7 @@ def printf(dnf, s):
                 if el[k] != '~' and el[k] != dnf[j][k]:
                     eq = False
                     break
-            print('* |', end='') if eq is not False else print('  |', end='')
+            print('  *   |', end='') if eq is not False else print('      |', end='')
         print('\n', end='')
 
 
