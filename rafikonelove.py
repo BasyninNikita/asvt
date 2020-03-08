@@ -1,5 +1,6 @@
 import sys
 import sympy.logic
+import re
 
 
 def weight(st):
@@ -71,8 +72,13 @@ def petcrickMeth(dnf, s, kernelImp):
     new_knf = sympy.simplify_logic(knf)
     # str_knf = str(sympy.to_cnf(new_knf))
     str_knf = str(sympy.to_dnf(new_knf))
+    #str_knf = '(A1&A3)|'
+    str_knf = re.sub(r"[()A]","", str_knf)
+    str_knf = str_knf[:str_knf.find('|')].split('&')
+    for el in str_knf:
+        kernelImp.add(l[int(el)])
     #nado rasparsit' pervuy monom v novoy dnf i sobsna vso
-    return str_knf
+    return kernelImp
 
 
 def printf(dnf, s):
