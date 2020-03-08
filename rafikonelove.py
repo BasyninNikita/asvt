@@ -1,12 +1,64 @@
 import sys
+import sympy.logic
 
 
-def weight(str):
+def weight(st):
     weight = 0
-    for s in str:
+    for s in st:
         if s == '1':
             weight += 1
     return weight
+
+
+def kernelImpl(dnf, s):
+    kernelImp = set()
+    l = list(s)
+    i = 0
+    while i < len(dnf):
+        s = ''
+        for j in range(len(l)):
+            eq = True
+            for k in range(len(l[j])):
+                if l[j][k] != '~' and l[j][k] != dnf[i][k]:
+                    eq = False
+                    break
+            if eq:
+                s += str(j) + ','
+        s = s[:-1]
+        if ',' not in s:
+            kernelImp.add(l[int(s)])
+            dnf.remove(dnf[i])
+            i -= 1
+            continue
+        i += 1
+    return kernelImp, dnf
+
+
+def petcrickMeth(dnf, s, kernelImp):
+    l = list(s)
+    for el in kernelImp:
+        l.remove(el)
+    knf = ''
+    for i in range(len(dnf)):
+        s = '('
+        for j in range(len(l)):
+            eq = True
+            for k in range(len(l[j])):
+                if l[j][k] != '~' and l[j][k] != dnf[i][k]:
+                    eq = False
+                    break
+            if eq:
+                s += 'A' + str(j) + ' | '
+        s = s[:-3] + ')'
+        if s != ')':
+            knf += s + ' & '
+    knf = knf[:-3]
+    # vot tut nado kajduy element seta naiti v liste i udalit'
+    # sss = sympy.to_dnf(knf)
+    new_knf = sympy.simplify_logic(knf)
+    # str_knf = str(sympy.to_cnf(new_knf))
+    str_knf = str(sympy.to_dnf(new_knf))
+    return str_knf
 
 
 def printf(dnf, s):
@@ -27,6 +79,8 @@ def printf(dnf, s):
                     break
             print('  *   |', end='') if eq is not False else print('      |', end='')
         print('\n', end='')
+    kernelIpm, new_dnf  = kernelImpl(dnf, s)
+    print(petcrickMeth(new_dnf, s, kernelIpm))
 
 
 def minim(n, d, dnf):
@@ -72,9 +126,9 @@ def minim(n, d, dnf):
 d = dict()
 dnf = list()
 n = 6
-for str in sys.stdin:
-    str = str.strip('\n')
-    d.setdefault(weight(str), [])
-    d.get(weight(str)).append([str, True])
-    dnf.append(str)
+for st in sys.stdin:
+    st = st.strip('\n')
+    d.setdefault(weight(st), [])
+    d.get(weight(st)).append([st, True])
+    dnf.append(st)
 minim(n, d, dnf)
