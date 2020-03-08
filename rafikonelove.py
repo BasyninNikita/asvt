@@ -31,6 +31,19 @@ def kernelImpl(dnf, s):
             i -= 1
             continue
         i += 1
+    for el in kernelImp:
+        i = 0
+        while i < len(dnf):
+            eq = True
+            for k in range(len(dnf[i])):
+                if el[k] != '~' and dnf[i][k] != el[k]:
+                    eq = False
+                    break
+            if eq:
+                dnf.remove(dnf[i])
+                i -= 1
+                continue
+            i += 1
     return kernelImp, dnf
 
 
@@ -58,6 +71,7 @@ def petcrickMeth(dnf, s, kernelImp):
     new_knf = sympy.simplify_logic(knf)
     # str_knf = str(sympy.to_cnf(new_knf))
     str_knf = str(sympy.to_dnf(new_knf))
+    #nado rasparsit' pervuy monom v novoy dnf i sobsna vso
     return str_knf
 
 
