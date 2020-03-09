@@ -11,54 +11,54 @@ def weight(st):
     return weight
 
 
-def kernelImpl(dnf, s):
-    kernelImp = set()
+def kernelImpl(r_dnf, s):
+    kernelImplic = set()
     l = list(s)
     i = 0
-    while i < len(dnf):
+    while i < len(r_dnf):
         s = ''
         for j in range(len(l)):
             eq = True
             for k in range(len(l[j])):
-                if l[j][k] != '~' and l[j][k] != dnf[i][k]:
+                if l[j][k] != '~' and l[j][k] != r_dnf[i][k]:
                     eq = False
                     break
             if eq:
                 s += str(j) + ','
         s = s[:-1]
         if ',' not in s:
-            kernelImp.add(l[int(s)])
-            dnf.remove(dnf[i])
+            kernelImplic.add(l[int(s)])
+            r_dnf.remove(r_dnf[i])
             i -= 1
             continue
         i += 1
-    for el in kernelImp:
+    for el in kernelImplic:
         i = 0
-        while i < len(dnf):
+        while i < len(r_dnf):
             eq = True
-            for k in range(len(dnf[i])):
-                if el[k] != '~' and dnf[i][k] != el[k]:
+            for k in range(len(r_dnf[i])):
+                if el[k] != '~' and r_dnf[i][k] != el[k]:
                     eq = False
                     break
             if eq:
-                dnf.remove(dnf[i])
+                r_dnf.remove(r_dnf[i])
                 i -= 1
                 continue
             i += 1
-    return kernelImp, dnf
+    return kernelImplic, r_dnf
 
 
-def petcrickMeth(dnf, s, kernelImp):
+def petcrickMeth(r_dnf, s, kernelImp):
     l = list(s)
     for el in kernelImp:
         l.remove(el)
     knf = ''
-    for i in range(len(dnf)):
+    for i in range(len(r_dnf)):
         s = '('
         for j in range(len(l)):
             eq = True
             for k in range(len(l[j])):
-                if l[j][k] != '~' and l[j][k] != dnf[i][k]:
+                if l[j][k] != '~' and l[j][k] != r_dnf[i][k]:
                     eq = False
                     break
             if eq:
@@ -67,17 +67,11 @@ def petcrickMeth(dnf, s, kernelImp):
         if s != ')':
             knf += s + ' & '
     knf = knf[:-3]
-    # vot tut nado kajduy element seta naiti v liste i udalit'
-    # sss = sympy.to_dnf(knf)
-    new_knf = sympy.simplify_logic(knf)
-    # str_knf = str(sympy.to_cnf(new_knf))
-    str_knf = str(sympy.to_dnf(new_knf))
-    #str_knf = '(A1&A3)|'
-    str_knf = re.sub(r"[()A]","", str_knf)
+    str_knf = str(sympy.to_dnf(sympy.simplify_logic(knf)))
+    str_knf = re.sub(r"[()A]", "", str_knf)
     str_knf = str_knf[:str_knf.find('|')].split('&')
     for el in str_knf:
         kernelImp.add(l[int(el)])
-    #nado rasparsit' pervuy monom v novoy dnf i sobsna vso
     return kernelImp
 
 
@@ -99,11 +93,10 @@ def printf(dnf, s):
                     break
             print('  *   |', end='') if eq is not False else print('      |', end='')
         print('\n', end='')
-    kernelIpm, new_dnf  = kernelImpl(dnf, s)
-    print(petcrickMeth(new_dnf, s, kernelIpm))
 
 
 def minim(n, d, dnf):
+    r_dnf = ' '.join(dnf)
     rep = False
     s = set()
     while True:
@@ -141,7 +134,11 @@ def minim(n, d, dnf):
         if rep is False:
             break
     printf(dnf, s)
-
+    kernelIpm, new_dnf = kernelImpl(dnf, s)
+    ans = petcrickMeth(new_dnf, s, kernelIpm)
+    r_dnf = r_dnf.split()
+    printf(r_dnf, ans)
+    print("Минимальное покрытие: \n" + str(ans))
 
 d = dict()
 dnf = list()
