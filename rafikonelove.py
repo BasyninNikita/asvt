@@ -1,4 +1,3 @@
-import sys
 import sympy.logic
 import re
 
@@ -137,13 +136,16 @@ def minim(n, d, dnf):
     kernelIpm, new_dnf = kernelImpl(dnf, s)
     ans = petcrickMeth(new_dnf, s, kernelIpm)
     r_dnf = r_dnf.split()
+    print("\n \n Минимальное покрытие: \n" + str(ans)+ '\n\n')
     printf(r_dnf, ans)
-    print("Минимальное покрытие: \n" + str(ans))
+
 
 d = dict()
 dnf = list()
 n = 6
-for st in sys.stdin:
+filename = r'inp.txt'
+var = open(filename)
+for st in var:
     st = st.strip('\n')
     d.setdefault(weight(st), [])
     d.get(weight(st)).append([st, True])
